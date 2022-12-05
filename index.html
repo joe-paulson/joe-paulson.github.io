@@ -25,7 +25,8 @@
 						<div class="content">
 							<div class="inner">
 								<h1>Joe Paulson</h1>
-								<p>Fourth year Data Analytics student at the University of Denver graduating in June of 2023 </p>
+								<p>Fourth year Data Analytics student at the University of Denver<br>
+									Graduating in June 2023 </p>
 							</div>
 						</div>
 						<nav>
@@ -56,6 +57,85 @@
 								<span class="image main"><img src="images/pic02.jpg" alt="" /></span>
 								<p>Adipiscing magna sed dolor elit. Praesent eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent urna nisi, fringila lorem et vehicula lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices.</p>
 								<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet feugiat tempus.</p>
+								<h3 class="minor">Python Script for Power Bi Dashboard</h3>
+								<pre class="brush: python">
+									<code style = "font-size: x-small;">
+from pytrends.request import TrendReq
+import pandas as pd
+from pandas import DataFrame
+from time import sleep
+from tqdm.notebook import tqdm
+trend = TrendReq(hl='en-US', tz=360)
+kw_list  = ['keyword1','keyword2', 'keyword3',etc]
+writer = pd.ExcelWriter('Google Trends Keywords.xlsx', engine='xlsxwriter')
+
+failed_kw = []
+
+def collect_google_data(keyword):
+    try:
+        trend.build_payload([keyword],timeframe='2019-01-01 2022-12-31')    
+
+        data = trend.interest_over_time()
+        data = data.drop(labels=['isPartial'],axis='columns')
+        data = data.reset_index()
+
+        data['date'] = pd.to_datetime(data['date'])
+        data['2019 Popularity'] = data[keyword][data['date'].dt.year == 2019]
+        data['2020 Popularity'] = data[keyword][data['date'].dt.year == 2020]
+        data['2021 Popularity'] = data[keyword][data['date'].dt.year == 2021]
+        data['2022 Popularity'] = data[keyword][data['date'].dt.year == 2022]
+
+        data2019 = data[data['2019 Popularity'].notna()]
+        data2020 = data[data['2020 Popularity'].notna()]
+        data2021 = data[data['2021 Popularity'].notna()]
+        data2022 = data[data['2022 Popularity'].notna()]
+
+        df = pd.concat([data2019.reset_index(drop=True),data2020.reset_index(drop=True),
+                        data2021.reset_index(drop=True),data2022.reset_index(drop=True)], axis=1)
+
+        cols = []
+        count = 1
+        for column in df.columns:
+            if column == 'date':
+                cols.append(f'date_{count}')
+                count+=1
+                continue
+            cols.append(column)
+        df.columns = cols
+        df = df.dropna(axis=1,how='all')
+        df = df.drop(df.columns[[1]],axis = 1)
+        df = df.drop(df.columns[[2,4,6]],axis = 1)
+        df = df.rename(columns={'date_1': 'Date'})
+        df.set_index('Date')
+        df['Date'] = df['Date'].dt.strftime('%m-%d')
+    
+        return df 
+    
+    except Exception as e:
+        print(keyword, e)
+        failed_kw.append(keyword)
+        
+        return None
+    
+for keyword in tqdm(kw_list):
+    df = pd.DataFrame()
+    try: 
+        df = collect_google_data(keyword)
+        if len(df) > 0:
+            df.to_excel(writer, sheet_name= keyword, index = False)
+
+        sleep(10)
+    
+    except Exception as e:
+        print(keyword, e)
+        sleep(20)
+        df = collect_google_data(keyword)
+        if len(df) > 0:
+            df.to_excel(writer, sheet_name= keyword, index = False)
+        
+writer.save()
+									</code>
+								</pre>
 							</article>
 
 						<!-- Education -->
