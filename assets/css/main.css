@@ -143,7 +143,7 @@ input, select, textarea {
 		color: #ffffff;
 		font-family: "Source Sans Pro", sans-serif;
 		font-weight: 300;
-		font-size: 1rem;
+		font-size: 0.9rem;
 		line-height: 1.65;
 	}
 
@@ -171,7 +171,7 @@ input, select, textarea {
 	}
 
 	p {
-		margin: 0 0 2rem 0;
+		margin: 0 0 0.8rem 0;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -260,7 +260,7 @@ input, select, textarea {
 	}
 
 	code {
-		background: rgba(255, 255, 255, 0.075);
+		background: rgba(255, 251, 251, 0.075);
 		border-radius: 4px;
 		font-family: "Courier New", monospace;
 		font-size: 0.9rem;
@@ -791,6 +791,7 @@ input, select, textarea {
 
 		ul.actions.special {
 			-moz-justify-content: center;
+
 			-webkit-justify-content: center;
 			-ms-justify-content: center;
 			justify-content: center;
@@ -1140,9 +1141,12 @@ input, select, textarea {
 			-ms-transition-delay: 0.75s;
 			transition-delay: 0.75s;
 			background-image: linear-gradient(to top, rgba(19, 21, 25, 0.5), rgba(19, 21, 25, 0.5)), url("../../images/overlay.png");
-			background-size: auto, 256px 256px;
-			background-position: center, center;
-			background-repeat: no-repeat, repeat;
+			background-size: auto,
+ 256px 256px;
+			background-position: center,
+ center;
+			background-repeat: no-repeat,
+ repeat;
 			z-index: 2;
 		}
 
@@ -1360,8 +1364,8 @@ input, select, textarea {
 					line-height: 2.75rem;
 					padding: 0 1.25rem 0 1.45rem;
 					text-transform: uppercase;
-					letter-spacing: 0.2rem;
-					font-size: 0.8rem;
+					letter-spacing: 0.1rem;
+					font-size: 0.6rem;
 					border-bottom: 0;
 				}
 
